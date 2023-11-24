@@ -6,17 +6,20 @@ package VISTA;
 
 import CONTROLADOR.JavaConnect;
 import MODELO.Usuario;
-import java.beans.Statement;
+import java.awt.BorderLayout;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
-import static org.apache.derby.iapi.reference.ClassName.ResultSet;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -27,7 +30,7 @@ public class PanelDetalle extends javax.swing.JPanel {
     private final JPanelEntrar jframe;
 
     GregorianCalendar fecha;
-    ResultSet rs = null;
+    ResultSet rs;
     ResultSet rsAux;
     int numfilas = 0;
 
@@ -43,12 +46,9 @@ public class PanelDetalle extends javax.swing.JPanel {
 
     public void DatoUsuario() {
 
-        //String usuario = jframe.verificarUsuario();  // necesito retornar el usuario usado en la verificacion
         try {
 
-            java.sql.Statement stmt = JavaConnect.getConnection().createStatement(); // creamos una consulta en la base de datos
-
-            //Statement stmt = JavaConnect.getConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            Statement stmt = JavaConnect.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = stmt.executeQuery("SELECT * FROM coche WHERE cod_usuario = " + Usuario.getNumero() + "");
             ResultSetMetaData rsmd = rs.getMetaData();
 
@@ -59,11 +59,6 @@ public class PanelDetalle extends javax.swing.JPanel {
 
     }
 
-    /*public void actualizarDatos()
-    {
-        lblUsuario.setText(Usuario.getNombre());
-        datosUsuario();
-    }*/
     public void numeroFilas() {
 
         //
@@ -75,7 +70,21 @@ public class PanelDetalle extends javax.swing.JPanel {
         }
     }
 
+    public void mostrarDatos() //metodo para mostrar datos
+    {
+        try {
+            jlabelNumeroActual.setText(rs.getRow() + " / " + numfilas);
+            textFieldModelo.setText(rs.getString("modelo"));
+            textFieldColor.setText(rs.getString("color"));
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public void mostrarPrimerRegistro() {
+
+        lblUsuario.setText(Usuario.getNombre());
 
         try {
 
@@ -133,11 +142,13 @@ public class PanelDetalle extends javax.swing.JPanel {
         btnAnterior = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btnUltimo = new javax.swing.JButton();
         lblNumero = new javax.swing.JLabel();
         jlabelNumeroActual = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lblUsuario = new javax.swing.JLabel();
 
         textFieldColor.setText("jTextField1");
 
@@ -156,6 +167,11 @@ public class PanelDetalle extends javax.swing.JPanel {
         });
 
         jButton2.setText("Primero");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         btnSiguiente.setText("Siguiente");
         btnSiguiente.addActionListener(new java.awt.event.ActionListener() {
@@ -164,7 +180,12 @@ public class PanelDetalle extends javax.swing.JPanel {
             }
         });
 
-        jButton4.setText("Ultimo");
+        btnUltimo.setText("Ultimo");
+        btnUltimo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUltimoActionPerformed(evt);
+            }
+        });
 
         lblNumero.setText("Num:");
 
@@ -174,6 +195,10 @@ public class PanelDetalle extends javax.swing.JPanel {
 
         jLabel2.setText("Color");
 
+        jLabel3.setText("Usuario :");
+
+        lblUsuario.setText("Usu");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -181,15 +206,6 @@ public class PanelDetalle extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(99, 99, 99)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(71, 71, 71)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(textFieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton2)
@@ -200,16 +216,36 @@ public class PanelDetalle extends javax.swing.JPanel {
                                 .addGap(29, 29, 29)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnSiguiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addComponent(btnUltimo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jlabelNumeroActual, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(jlabelNumeroActual, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel2)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(71, 71, 71)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(textFieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(textFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(356, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(lblUsuario))
+                .addGap(59, 59, 59)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(textFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -228,14 +264,10 @@ public class PanelDetalle extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton4))
+                    .addComponent(btnUltimo))
                 .addContainerGap(147, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    private void textFieldModeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldModeloActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_textFieldModeloActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
 
@@ -247,8 +279,9 @@ public class PanelDetalle extends javax.swing.JPanel {
 
         try {
             if (!rs.isFirst()) {
-                mostrarPrimerRegistro();
+
                 rs.previous();
+                mostrarDatos();
 
             }
 
@@ -257,16 +290,45 @@ public class PanelDetalle extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
+    private void textFieldModeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldModeloActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textFieldModeloActionPerformed
+
+    private void btnUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUltimoActionPerformed
+
+        try {
+            rs.last();
+            mostrarDatos();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnUltimoActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+
+        try {
+            rs.first();
+            mostrarDatos();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
     private javax.swing.JButton btnSiguiente;
+    private javax.swing.JButton btnUltimo;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jlabelNumeroActual;
     private javax.swing.JLabel lblNumero;
+    private javax.swing.JLabel lblUsuario;
     private javax.swing.JTextField textFieldColor;
     private javax.swing.JTextField textFieldModelo;
     // End of variables declaration//GEN-END:variables

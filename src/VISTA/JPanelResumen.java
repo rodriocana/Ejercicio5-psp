@@ -4,17 +4,117 @@
  */
 package VISTA;
 
+import CONTROLADOR.JavaConnect;
+import MODELO.Usuario;
+import java.awt.BorderLayout;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+
 /**
  *
  * @author Rodri
  */
 public class JPanelResumen extends javax.swing.JPanel {
 
-    /**
-     * Creates new form JPanelResumen
-     */
+    ResultSet rs;
+    ResultSet rsAux;
+    int numfilas = 0;
+    GregorianCalendar fecha;
+    String rutaImagen;
+
     public JPanelResumen() {
         initComponents();
+
+        DatoUsuario();
+        //mostrarPrimerRegistro();
+        //mostrarDatos();
+    }
+
+    public void DatoUsuario() {
+
+        try {
+
+            java.sql.Statement stmt = JavaConnect.getConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            rs = stmt.executeQuery("SELECT * FROM usuario");
+
+            if (rs.first()) //pasa a la siguiente tupla
+            {
+                mostrarDatos();
+
+            }
+
+            // rs.close();
+            //stmt.close();
+        } catch (Exception e) {
+            System.out.println("ALGO HA FALLADO EN -> PanelDetalle -> datosUsuario()");
+            System.out.println(e);
+        }
+    }
+
+    public void mostrarPrimerRegistro() {
+
+        lblUsuario.setText(Usuario.getNombre());
+
+        try {
+
+            while (rs.next()) {
+
+                lblNumActual.setText(rs.getRow() + " / " + numfilas);
+                textFieldCodigo.setText(rs.getString("numero"));
+                textFieldNombre.setText(rs.getString("nombre"));
+                textFieldSueldo.setText(rs.getString("sueldo"));
+                System.out.print(rs.getString(1) + " ");
+
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(JPanelResumen.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public void mostrarDatos() //metodo para mostrar datos
+    {
+        try {
+            lblNumActual.setText(rs.getRow() + " / " + numfilas);
+            textFieldCodigo.setText(rs.getString("numero"));
+            textFieldNombre.setText(rs.getString("nombre"));
+            textFieldSueldo.setText(rs.getString("sueldo"));
+
+            java.sql.Timestamp timestamp = rs.getTimestamp("fechaalta");
+            if (timestamp != null) {
+                fecha = new GregorianCalendar();
+                fecha.setTimeInMillis(timestamp.getTime());
+
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy"); // define el formato de la fecha
+                String fechaAltaFormateada = dateFormat.format(fecha.getTime()); // formatea la fecha
+                txtFecha.setText(fechaAltaFormateada); // muestro la fecha formateada en el label
+
+            }
+
+            /*rutaImagen = rs.getString("rutaimagen");
+            if (rutaImagen != null && !rutaImagen.isEmpty()) {
+                javax.swing.ImageIcon imagenIcon = new javax.swing.ImageIcon(getClass().getResource(rutaImagen));
+                java.awt.Image imagenEscalada = imagenIcon.getImage().getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+                lblFotoUsuario.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+            } else {
+                lblFotoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/practica5/default.jpg"))); // Imagen por defecto
+            }*/
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelDetalle.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -26,25 +126,32 @@ public class JPanelResumen extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
-        textFieldColor = new javax.swing.JTextField();
-        textFieldModelo = new javax.swing.JTextField();
+        textFieldNombre = new javax.swing.JTextField();
+        lblUsuario = new javax.swing.JLabel();
+        textFieldCodigo = new javax.swing.JTextField();
         btnAnterior = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         lblNumero = new javax.swing.JLabel();
-        jlabelNumeroActual = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblNumActual = new javax.swing.JLabel();
+        txtNumero = new javax.swing.JLabel();
+        txtNombre = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        btnListaCoches = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        txtFecha = new javax.swing.JTextField();
+        textFieldSueldo = new javax.swing.JTextField();
+        txtSueldo = new javax.swing.JLabel();
 
-        jLabel2.setText("Color");
+        textFieldNombre.setText("jTextField1");
 
-        textFieldColor.setText("jTextField1");
+        lblUsuario.setText("Usu");
 
-        textFieldModelo.setText("jTextField1");
-        textFieldModelo.addActionListener(new java.awt.event.ActionListener() {
+        textFieldCodigo.setText("jTextField1");
+        textFieldCodigo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                textFieldModeloActionPerformed(evt);
+                textFieldCodigoActionPerformed(evt);
             }
         });
 
@@ -68,93 +175,215 @@ public class JPanelResumen extends javax.swing.JPanel {
 
         lblNumero.setText("Num:");
 
-        jlabelNumeroActual.setText("jLabel1");
+        lblNumActual.setText("jLabel1");
 
-        jLabel1.setText("Modelo");
+        txtNumero.setText("Codigo Usuario");
+
+        txtNombre.setText("Nombre");
+
+        jLabel3.setText("Usuario :");
+
+        btnListaCoches.setText("ListaCoches");
+        btnListaCoches.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnListaCochesActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setText("Fecha");
+
+        txtFecha.setText("jTextField1");
+
+        textFieldSueldo.setText("jTextField1");
+        textFieldSueldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                textFieldSueldoActionPerformed(evt);
+            }
+        });
+
+        txtSueldo.setText("Sueldo");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(99, 99, 99)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(102, 102, 102)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton2)
+                    .addComponent(btnAnterior)
+                    .addComponent(lblNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnSiguiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblNumActual, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 168, Short.MAX_VALUE)
+                .addComponent(btnListaCoches)
+                .addGap(120, 120, 120))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(118, 118, 118)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtNumero)
+                        .addComponent(txtNombre)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
+                            .addComponent(jLabel4)
+                            .addComponent(txtSueldo))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addGap(71, 71, 71)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(textFieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(textFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(textFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textFieldCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textFieldSueldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2)
-                            .addComponent(btnAnterior)
-                            .addComponent(lblNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnSiguiente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jlabelNumeroActual, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(356, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(98, 98, 98)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textFieldModelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(jLabel3)
+                    .addComponent(lblUsuario))
+                .addGap(59, 59, 59)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(textFieldCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNumero))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(textFieldColor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(48, 48, 48)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNumero)
-                    .addComponent(jlabelNumeroActual))
-                .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAnterior)
-                    .addComponent(btnSiguiente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton4))
-                .addContainerGap(147, Short.MAX_VALUE))
+                    .addComponent(textFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNombre))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(169, 169, 169)
+                        .addComponent(btnListaCoches)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(textFieldSueldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtSueldo))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblNumero)
+                            .addComponent(lblNumActual))
+                        .addGap(31, 31, 31)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAnterior)
+                            .addComponent(btnSiguiente))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(jButton4))
+                        .addGap(58, 58, 58))))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void textFieldModeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldModeloActionPerformed
+    private void textFieldCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldCodigoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_textFieldModeloActionPerformed
+    }//GEN-LAST:event_textFieldCodigoActionPerformed
 
     private void btnAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAnteriorActionPerformed
 
-     
+        try {
+            rs.previous(); //pasa a la anterior tupla
+
+            mostrarDatos();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnAnteriorActionPerformed
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
 
+        try {
+
+            rs.next(); //pasa a la siguiente tupla
+
+            mostrarDatos();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_btnSiguienteActionPerformed
+
+    private void textFieldSueldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_textFieldSueldoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_textFieldSueldoActionPerformed
+
+    private void btnListaCochesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListaCochesActionPerformed
+
+        try {
+
+            //Creo la nueva ventana
+            JFrame VistaCoches = new JFrame();
+            VistaCoches.setSize(400, 600);
+
+            //Creo la lista de empleados
+            DefaultListModel<String> listaModelo = new DefaultListModel<>();
+
+            java.sql.Statement stmt = JavaConnect.getConnection().createStatement(); // creamos una consulta en la base de datos
+            rs = stmt.executeQuery("SELECT * FROM coche WHERE cod_usuario = " + Usuario.getNumero() + "");
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            while (rsAux.next()) {
+
+                listaModelo.addElement(
+                        rsAux.getString("modelo") + ", "
+                        + rsAux.getString("color")
+                );
+            }
+
+            JList<String> listaEmpleados = new JList<>(listaModelo);
+
+            VistaCoches.getContentPane().setLayout(new BorderLayout());
+            VistaCoches.getContentPane().add(new JScrollPane(listaEmpleados), BorderLayout.CENTER);
+
+            VistaCoches.setVisible(true);
+
+        } catch (SQLException ex) {
+            Logger.getLogger(JPanelResumen.class
+                    .getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_btnListaCochesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
+    private javax.swing.JButton btnListaCoches;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jlabelNumeroActual;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel lblNumActual;
     private javax.swing.JLabel lblNumero;
-    private javax.swing.JTextField textFieldColor;
-    private javax.swing.JTextField textFieldModelo;
+    private javax.swing.JLabel lblUsuario;
+    private javax.swing.JTextField textFieldCodigo;
+    private javax.swing.JTextField textFieldNombre;
+    private javax.swing.JTextField textFieldSueldo;
+    private javax.swing.JTextField txtFecha;
+    private javax.swing.JLabel txtNombre;
+    private javax.swing.JLabel txtNumero;
+    private javax.swing.JLabel txtSueldo;
     // End of variables declaration//GEN-END:variables
 }

@@ -35,6 +35,8 @@ public class JFramePrincipal extends javax.swing.JFrame {
 
         jPanelEntrar = new JPanelEntrar(this);
         this.cambiarPanel(jPanelInicio);
+        
+        
 
     }
 
@@ -154,7 +156,10 @@ public class JFramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_DetalleItemActionPerformed
 
     private void ResumenItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResumenItemActionPerformed
-        // TODO add your handling code here:
+       
+        JPanelResumen JPanelResumen = new JPanelResumen();
+        this.cambiarPanel(JPanelResumen);
+        
     }//GEN-LAST:event_ResumenItemActionPerformed
 
     private void cambiarPanel(javax.swing.JPanel panel) {
