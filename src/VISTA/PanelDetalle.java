@@ -140,7 +140,7 @@ public class PanelDetalle extends javax.swing.JPanel {
         textFieldColor = new javax.swing.JTextField();
         textFieldModelo = new javax.swing.JTextField();
         btnAnterior = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnPrimero = new javax.swing.JButton();
         btnSiguiente = new javax.swing.JButton();
         btnUltimo = new javax.swing.JButton();
         lblNumero = new javax.swing.JLabel();
@@ -166,10 +166,10 @@ public class PanelDetalle extends javax.swing.JPanel {
             }
         });
 
-        jButton2.setText("Primero");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnPrimero.setText("Primero");
+        btnPrimero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnPrimeroActionPerformed(evt);
             }
         });
 
@@ -208,7 +208,7 @@ public class PanelDetalle extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton2)
+                            .addComponent(btnPrimero)
                             .addComponent(btnAnterior)
                             .addComponent(lblNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -263,7 +263,7 @@ public class PanelDetalle extends javax.swing.JPanel {
                     .addComponent(btnSiguiente))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(btnPrimero)
                     .addComponent(btnUltimo))
                 .addContainerGap(147, Short.MAX_VALUE))
         );
@@ -271,7 +271,14 @@ public class PanelDetalle extends javax.swing.JPanel {
 
     private void btnSiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSiguienteActionPerformed
 
-        mostrarPrimerRegistro();
+        try {
+
+            rs.next(); //pasa a la siguiente tupla
+            mostrarDatos();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_btnSiguienteActionPerformed
 
@@ -306,7 +313,7 @@ public class PanelDetalle extends javax.swing.JPanel {
 
     }//GEN-LAST:event_btnUltimoActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnPrimeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrimeroActionPerformed
 
         try {
             rs.first();
@@ -315,14 +322,14 @@ public class PanelDetalle extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnPrimeroActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
+    private javax.swing.JButton btnPrimero;
     private javax.swing.JButton btnSiguiente;
     private javax.swing.JButton btnUltimo;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
