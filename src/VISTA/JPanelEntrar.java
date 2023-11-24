@@ -64,7 +64,7 @@ public class JPanelEntrar extends javax.swing.JPanel {
         ResultSet rs;
 
         usuario = jTextFieldUsuario.getText();
-        contraseña = jTextFieldContrasena.getText();
+        contraseña = jPasswordField1.getText();
 
         try {
 
@@ -139,19 +139,17 @@ public class JPanelEntrar extends javax.swing.JPanel {
         jLabelUsuario = new javax.swing.JLabel();
         jLabelContrasena = new javax.swing.JLabel();
         jTextFieldUsuario = new javax.swing.JTextField();
-        jTextFieldContrasena = new javax.swing.JTextField();
         jButtonAceptar = new javax.swing.JButton();
         jButtonCancelar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jPasswordField1 = new javax.swing.JPasswordField();
 
         jLabelUsuario.setText("Usuario:");
 
         jLabelContrasena.setText("Contraseña:");
 
         jTextFieldUsuario.setText("usuario");
-
-        jTextFieldContrasena.setText("*****");
 
         jButtonAceptar.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jButtonAceptar.setText("Aceptar");
@@ -186,10 +184,10 @@ public class JPanelEntrar extends javax.swing.JPanel {
                             .addComponent(jLabelUsuario)
                             .addComponent(jLabelContrasena))
                         .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(48, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextFieldUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                            .addComponent(jPasswordField1))
+                        .addContainerGap(102, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonCancelar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -210,7 +208,7 @@ public class JPanelEntrar extends javax.swing.JPanel {
                 .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelContrasena)
-                    .addComponent(jTextFieldContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancelar)
@@ -240,9 +238,9 @@ public class JPanelEntrar extends javax.swing.JPanel {
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JLabel jLabelContrasena;
     private javax.swing.JLabel jLabelUsuario;
+    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextFieldContrasena;
     private javax.swing.JTextField jTextFieldUsuario;
     // End of variables declaration//GEN-END:variables
 }

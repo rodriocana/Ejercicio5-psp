@@ -5,6 +5,7 @@
  */
 package VISTA;
 
+import CONTROLADOR.ControladorDetalle;
 import CONTROLADOR.JavaConnect;
 import MODELO.Usuario;
 import java.sql.Connection;
@@ -35,6 +36,8 @@ public class JFramePrincipal extends javax.swing.JFrame {
 
         jPanelEntrar = new JPanelEntrar(this);
         this.cambiarPanel(jPanelInicio);
+        
+        
         
         
 

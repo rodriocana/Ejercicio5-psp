@@ -4,6 +4,7 @@
  */
 package VISTA;
 
+import CONTROLADOR.ControladorDetalle;
 import CONTROLADOR.JavaConnect;
 import MODELO.Usuario;
 import java.awt.BorderLayout;
@@ -39,6 +40,7 @@ public class PanelDetalle extends javax.swing.JPanel {
 
         this.jframe = frame;
 
+        //ControladorDetalle detalle = new ControladorDetalle();
         DatoUsuario();
         mostrarPrimerRegistro();
 
