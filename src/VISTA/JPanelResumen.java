@@ -45,7 +45,7 @@ public class JPanelResumen extends javax.swing.JPanel {
 
         try {
 
-            java.sql.Statement stmt = JavaConnect.getConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            java.sql.Statement stmt = JavaConnect.getConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
             rs = stmt.executeQuery("SELECT * FROM usuario");
 
             if (rs.first()) //pasa a la siguiente tupla
@@ -71,6 +71,20 @@ public class JPanelResumen extends javax.swing.JPanel {
             textFieldNombre.setText(rs.getString("nombre"));
             textFieldSueldo.setText(rs.getString("sueldo"));
 
+            /*rutaImagen = rs.getString("IMAGEN");
+            if (rutaImagen != null && !rutaImagen.isEmpty()) {
+                javax.swing.ImageIcon imagenIcon = new javax.swing.ImageIcon(getClass().getResource(rutaImagen));
+                if (imagenIcon != null) {
+                    java.awt.Image imagenEscalada = imagenIcon.getImage().getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
+                    lblFotoUsuario.setIcon(new javax.swing.ImageIcon(imagenEscalada));
+                } else {
+                    // Manejar el caso en que no se pueda cargar la imagen
+                    System.out.println("No se pudo cargar la imagen desde: " + rutaImagen);
+                }
+            } else {
+                lblFotoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Ejercicio5-psp/default.jpg"))); // Imagen por defecto
+            }*/
+            
             java.sql.Timestamp timestamp = rs.getTimestamp("fechaalta");
             if (timestamp != null) {
                 fecha = new GregorianCalendar();
@@ -82,14 +96,6 @@ public class JPanelResumen extends javax.swing.JPanel {
 
             }
 
-            /*rutaImagen = rs.getString("imagen");
-            if (rutaImagen != null && !rutaImagen.isEmpty()) {
-                javax.swing.ImageIcon imagenIcon = new javax.swing.ImageIcon(getClass().getResource(rutaImagen));
-                java.awt.Image imagenEscalada = imagenIcon.getImage().getScaledInstance(200, 200, java.awt.Image.SCALE_SMOOTH);
-                lblFotoUsuario.setIcon(new javax.swing.ImageIcon(imagenEscalada));
-            } else {
-                lblFotoUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Ejercicio5-psp/default.jpg"))); // Imagen por defecto
-            }*/
         } catch (SQLException ex) {
             Logger.getLogger(PanelDetalle.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -188,7 +194,7 @@ public class JPanelResumen extends javax.swing.JPanel {
 
         txtSueldo.setText("Sueldo");
 
-        lblFotoUsuario.setText("jLabel1");
+        lblFotoUsuario.setText("IMAGEN");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -343,10 +349,10 @@ public class JPanelResumen extends javax.swing.JPanel {
         //Creo la nueva ventana
         JFrame VistaCoches = new JFrame();
         VistaCoches.setSize(400, 200);
-        
+
         DefaultListModel<String> listaModelo = new DefaultListModel<>();
         JList<String> ListaCoches = new JList<>(listaModelo);
-        
+
         VistaCoches.getContentPane().setLayout(new BorderLayout());
         VistaCoches.getContentPane().add(new JScrollPane(ListaCoches), BorderLayout.CENTER);
         VistaCoches.getContentPane().setBackground(Color.RED);

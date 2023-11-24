@@ -246,7 +246,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblFotoUsuario">
       <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel1"/>
+        <Property name="text" type="java.lang.String" value="IMAGEN"/>
       </Properties>
     </Component>
   </SubComponents>

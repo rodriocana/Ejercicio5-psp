@@ -194,7 +194,7 @@ public class JPanelEntrar extends javax.swing.JPanel {
                         .addComponent(jButtonAceptar)
                         .addGap(62, 62, 62))))
             .addGroup(layout.createSequentialGroup()
-                .addGap(68, 68, 68)
+                .addGap(93, 93, 93)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
