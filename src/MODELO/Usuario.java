@@ -36,6 +36,29 @@ public class Usuario {
         }
         this.password = password;
     }
+    
+    
+    //constructor sin imagen
+    public Usuario(int numero, String nombre, float sueldo, String fechaalta, String password) {
+        this.numero = numero;
+        this.nombre = nombre;
+        this.sueldo = sueldo;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            this.fechaalta = new GregorianCalendar();
+            this.fechaalta.setTime(dateFormat.parse(fechaalta));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        this.password = password;
+    }
+    
+    //constructor vacio
+    public Usuario(){
+        
+        
+        
+    }
 
     static public int getNumero() {
         return numero;
@@ -70,7 +93,7 @@ public class Usuario {
         this.fechaalta = fechaAlta;
     }
 
-    static public String getPassword() {
+    public String getPassword() { // esto debe ser estatico
         return password;
     }
 

@@ -13,7 +13,8 @@ public class Coche {
         private int cod_coche;
         private String modelo;
         private String color;
-        private int codigo_usuario;
+        
+        private int codigo_usuario; // FK 
 
     public Coche(int cod_coche, String modelo, String color, int codigo_usuario) {
         this.cod_coche = cod_coche;
@@ -24,6 +25,11 @@ public class Coche {
 
     public int getCodigo_usuario() {
         return codigo_usuario;
+    }
+    
+    public Coche(){
+        
+        
     }
 
     public void setCodigo_usuario(int codigo_usuario) {

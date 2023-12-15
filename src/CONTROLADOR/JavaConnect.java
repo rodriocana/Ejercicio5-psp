@@ -24,7 +24,7 @@ public class JavaConnect {
 
         try {
 
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/GIMNASIO", "rodrigo", "admin");
+            con = DriverManager.getConnection("jdbc:derby://localhost:1527/UsuariosCoches", "rodrigo", "admin");
             System.out.println("Conectado");
 
         } catch (Exception e) {

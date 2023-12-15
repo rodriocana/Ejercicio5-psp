@@ -4,7 +4,7 @@
  */
 package VISTA;
 
-import CONTROLADOR.ControladorDetalle;
+import CONTROLADOR.ConsultaDetalle;
 import CONTROLADOR.JavaConnect;
 import MODELO.Usuario;
 import java.awt.BorderLayout;
@@ -40,8 +40,10 @@ public class PanelDetalle extends javax.swing.JPanel {
 
         this.jframe = frame;
 
-        //ControladorDetalle detalle = new ControladorDetalle();
+        //ConsultaDetalle detalle = new ConsultaDetalle(); // aqui creamos una instancia de la clase ControladorDetalle
+        //detalle.DatoUsuario();  // aqui llamamos al statement 
         DatoUsuario();
+
         mostrarPrimerRegistro();
 
     }
@@ -74,10 +76,28 @@ public class PanelDetalle extends javax.swing.JPanel {
 
     public void mostrarDatos() //metodo para mostrar datos
     {
+
         try {
             jlabelNumeroActual.setText(rs.getRow() + " / " + numfilas);
             textFieldModelo.setText(rs.getString("modelo"));
             textFieldColor.setText(rs.getString("color"));
+
+            if (rs.isLast()) //si está sobre la última tupla, anula el botón siguiente
+            {
+                btnSiguiente.setEnabled(false);
+                btnUltimo.setEnabled(false);
+                btnAnterior.setEnabled(true);
+                btnPrimero.setEnabled(true);
+            }
+
+            if (rs.isFirst()) {
+
+                btnAnterior.setEnabled(false);
+                btnPrimero.setEnabled(false);
+                btnSiguiente.setEnabled(true);
+                btnUltimo.setEnabled(true);
+
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(PanelDetalle.class.getName()).log(Level.SEVERE, null, ex);

@@ -5,7 +5,7 @@
  */
 package VISTA;
 
-import CONTROLADOR.ControladorDetalle;
+import CONTROLADOR.ConsultaDetalle;
 import CONTROLADOR.JavaConnect;
 import MODELO.Usuario;
 import java.sql.Connection;

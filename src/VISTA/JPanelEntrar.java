@@ -5,6 +5,7 @@
  */
 package VISTA;
 
+import CONTROLADOR.ConsultaUsuario;
 import CONTROLADOR.JavaConnect;
 import MODELO.Usuario;
 import java.sql.Connection;
@@ -59,77 +60,43 @@ public class JPanelEntrar extends javax.swing.JPanel {
         
         return imagenBytes;
     }*/
-    public String verificarUsuario() {
-
-        ResultSet rs;
+   
+    public Boolean compruebaUser() throws SQLException {
 
         usuario = jTextFieldUsuario.getText();
         contraseña = jPasswordField1.getText();
 
-        try {
+        Usuario u1;
 
-            Statement stmt = JavaConnect.getConnection().createStatement(); // creamos una consulta en la base de datos
-            rs = stmt.executeQuery("SELECT * FROM usuario WHERE nombre = '" + usuario + "'");
-            ResultSetMetaData rsmd = rs.getMetaData();
+        u1 = ConsultaUsuario.getUsuario(usuario, contraseña);
 
-            existe = 0; //inicializo la variable a 0 cada vez que se ejecuta la consulta
-            crear = 0; //idem
+        if (u1 == null) {  // entra aqui siempre no se por que es null
 
-            while (rs.next()) {
+            jTextFieldUsuario.setText(" ");
+            jPasswordField1.setText(" ");
+            jTextArea1.setText("Verificacion Incorrecta!!");
+            return false;
 
-                // aqui guardamos los valores de los campos de la tabla en variables
-                numero = rs.getInt(1);
-                nombre = rs.getString(2);
-                sueldo = rs.getFloat(3);
-                fechaAlta = rs.getString(4);
-                password = rs.getString(5);
+        } else {
 
-                System.out.print(rs.getString(1) + " ");
-
-                if (password.equals(contraseña)) {
-
-                    System.out.println("Usuario y contraseña CORRECTA");
-                    ((JFramePrincipal) JFramePrincipal1).VisibilizarMenu(); // APRENDER BIEN
-                    existe++;
-                    crear++;
-                    
-                     jTextArea1.setText("Verificacion correcta!!");
-                    
-                    usuarioActual = new Usuario(numero, nombre, sueldo, fechaAlta, password, imagenBytes);
-                    System.out.println("Usuario creado");
-                    return usuario;
-
-                } else {
-
-                    System.out.println("Usuario y contraseña INCORRECTA");
-                    existe++;
-                    jTextArea1.setText("Verificacion Incorrecta!!");
-                }
-
-                rs.close();
-                stmt.close();
-
-                //JavaConnect.CerrarConexion();
-                System.out.println("");
-            }
-
-            if (existe == 0) //si la variable vuelve a 0, avisa que el usuario no existe
-            {
-                System.out.println("USUARIO INEXISTENTE");
-
-            }
-
-            if (crear != 0) //objeto Usuario creado si la contraseña y usuario son correctos
-            {
-                
-            }
-
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(JPanelEntrar.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
         }
 
-        return null;
+    }
+
+    public void usuarioValidado() throws SQLException {
+
+        if (compruebaUser()) {
+             
+            jTextArea1.setText("Verificacion correcta!!");
+            ((JFramePrincipal) JFramePrincipal1).VisibilizarMenu();
+        }else{
+            jTextFieldUsuario.setText(" ");
+            jPasswordField1.setText(" ");
+            jTextArea1.setText("Verificacion Incorrecta!!");
+            
+        }
+
     }
 
     @SuppressWarnings("unchecked")
@@ -221,9 +188,15 @@ public class JPanelEntrar extends javax.swing.JPanel {
 
     private void jButtonAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAceptarActionPerformed
 
-        verificarUsuario();
-        
-       
+        try {
+            compruebaUser(); // para entrar hace falta usuario y password correctos, como hacer para cuando sea incorrecto.
+            //verificarUsuario();
+            usuarioValidado();
+        } catch (SQLException ex) {
+            Logger.getLogger(JPanelEntrar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_jButtonAceptarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
